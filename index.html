@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون اعداد حقیقی</title>
+<style>
+*{box-sizing:border-box;font-family:Tahoma,sans-serif}
+body{background:linear-gradient(160deg,#eef2ff,#f0f4f8 60%,#e6fffa);margin:0;padding:16px;color:#2d3436;min-height:100vh}
+.card{max-width:820px;margin:0 auto;background:#fff;padding:26px;border-radius:22px;box-shadow:0 10px 28px rgba(80,60,200,.14);border-top:6px solid #6c5ce7}
+h1{color:#6c5ce7;text-align:center;font-size:24px;margin:0 0 6px}
+.sub{text-align:center;color:#636e72;margin-bottom:22px;line-height:2}
+.hero{text-align:center;font-size:54px}
+input{width:100%;padding:14px;margin:6px 0 14px;border:2px solid #dfe6e9;border-radius:12px;font-size:17px;text-align:right}
+input:focus{outline:none;border-color:#6c5ce7}
+button{padding:13px 28px;border:none;border-radius:50px;cursor:pointer;font-size:16px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#6c5ce7,#8e44ad)}
+button.g{background:linear-gradient(135deg,#00b894,#00cec9)}button.o{background:linear-gradient(135deg,#fdcb6e,#e17055)}
+button:disabled{opacity:.35;cursor:not-allowed}
+.big{width:100%}
+.top{display:flex;justify-content:space-between;align-items:center;background:#f1efff;padding:10px 16px;border-radius:12px;font-size:14px;margin-bottom:12px;gap:8px;flex-wrap:wrap}
+.bar{height:9px;background:#ecf0f1;border-radius:5px;overflow:hidden;margin-bottom:12px}
+.fill{height:100%;background:linear-gradient(90deg,#6c5ce7,#a29bfe);transition:width .5s}
+.dots{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:18px}
+.dot{width:30px;height:30px;padding:0;border-radius:8px;font-size:12px;background:#dfe6e9;color:#2d3436}
+.dot.ok{background:#00b894;color:#fff}.dot.bad{background:#ff7675;color:#fff}.dot.cur{outline:3px solid #6c5ce7;outline-offset:1px}
+.tag{display:inline-block;background:#eef2ff;color:#6c5ce7;border-radius:8px;padding:2px 12px;font-size:13px;margin-bottom:10px}
+.question{font-size:19px;font-weight:bold;line-height:2.3;border-right:4px solid #fdcb6e;padding-right:14px;margin-bottom:18px}
+.options{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+@media(max-width:600px){.options{grid-template-columns:1fr}.card{padding:16px}}
+.option{padding:14px;border:2px solid #dfe6e9;border-radius:14px;cursor:pointer;text-align:center;font-size:18px;min-height:62px;display:flex;align-items:center;justify-content:center;transition:.2s;background:#fff}
+.ol{width:100%}.ol b{display:block;text-align:right;color:#6c5ce7;font-size:15px}.option svg{max-width:100%;height:auto}
+.option:hover{border-color:#a29bfe;background:#f8f7ff}
+.locked .option{cursor:default}.locked .option:hover{background:#fff;border-color:#dfe6e9}
+.option.correct,.locked .option.correct:hover{border-color:#00b894;background:#e6fffa;color:#00896f}
+.option.incorrect,.locked .option.incorrect:hover{border-color:#ff7675;background:#fff5f5;color:#d63031;animation:shake .4s}
+.option.correct{animation:pop .45s}
+@keyframes pop{50%{transform:scale(1.06)}}
+@keyframes shake{25%{transform:translateX(7px)}75%{transform:translateX(-7px)}}
+.fb{margin-top:16px;padding:14px;border-radius:12px;text-align:center;font-weight:bold;display:none}
+.fb.ok{background:#00b894;color:#fff}.fb.bad{background:#ff7675;color:#fff}
+.exp{margin-top:16px;padding:18px;background:#f8f9fc;border-radius:14px;line-height:2.2;font-size:15px;display:none;border:1px solid #dcdde1}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:24px}
+.m{display:inline-block;direction:ltr;unicode-bidi:isolate;font-family:'Times New Roman',Tahoma,serif;vertical-align:middle;white-space:nowrap}
+.fraction{display:inline-block;vertical-align:middle;text-align:center;font-size:.9em;margin:0 4px}
+.numerator{border-bottom:2px solid currentColor;display:block;padding:0 3px}.denominator{display:block;padding:0 3px}
+.tw{overflow-x:auto;margin:10px 0}
+.tb{border-collapse:collapse;margin:0 auto;background:#fff;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.tb th{background:#6c5ce7;color:#fff;padding:7px 10px;border:1px solid #5a4bd1}
+.tb td{padding:6px 10px;border:1px solid #d0cdee;text-align:center;line-height:1.8}
+.tb tr:nth-child(odd) td{background:#f8f7ff}.tb tr.hl td{background:#c8f7e1!important;color:#00695c;font-weight:bold}
+.st{background:#fff;border-radius:12px;padding:10px 14px;margin:12px 0;border-right:5px solid #6c5ce7;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sn{display:inline-block;background:#6c5ce7;color:#fff;border-radius:50%;width:26px;height:26px;text-align:center;line-height:26px;margin-left:8px;font-size:13px}
+.sb{margin-top:6px}.r{margin-top:6px}
+.tip,.warn,.ans,.chk{border-radius:10px;padding:9px 13px;margin:10px 0}
+.tip{background:#fff8e1;border-right:5px solid #fdcb6e}.warn{background:#ffecec;border-right:5px solid #ff7675}
+.ans{background:#e0fbf1;border-right:5px solid #00b894;font-size:16px}.chk{background:#e8f4fd;border-right:5px solid #0984e3}
+.fig{text-align:center;margin:10px 0;overflow-x:auto}.fig svg{max-width:100%;height:auto}
+.score{font-size:56px;color:#6c5ce7;text-align:center;font-weight:bold}
+.weak{background:#fff8e1;border-radius:12px;padding:12px 18px;margin:14px 0;line-height:2.1}
+.foot{text-align:center;color:#b2bec3;font-size:12px;margin-top:22px}
+</style>
+</head>
+<body>
+<!-- صفحهٔ ورود -->
+<div class="card" id="start">
+  <div class="hero">🧮</div>
+  <h1>آزمون اعداد حقیقی</h1>
+  <div class="sub">با حل قدم‌به‌قدم، یاد می‌گیری نه فقط جواب بدهی!<br>اول نامت را بنویس تا شروع کنیم.</div>
+  <input id="fn" placeholder="نام" autocomplete="off">
+  <input id="ln" placeholder="نام خانوادگی" autocomplete="off">
+  <button class="big g" id="go">شروع آزمون</button>
+</div>
+
+<!-- آزمون -->
+<div class="card" id="quiz" hidden>
+  <div class="top"><span>👋 <b id="who"></b></span><span>✅ درست: <b id="okc" style="color:#00b894">0</b></span><span>📊 پاسخ‌داده: <b id="anc">0</b> از <b id="all">0</b></span></div>
+  <div class="bar"><div class="fill" id="fill"></div></div>
+  <div class="dots" id="dots"></div>
+  <div class="tag" id="sec"></div>
+  <div class="question" id="q"></div>
+  <div class="fig" id="dg"></div>
+  <div class="options" id="opts"></div>
+  <div class="fb" id="fb"></div>
+  <div class="exp" id="exp"></div>
+  <div class="nav"><button id="prev" class="o">➡ قبلی</button><button id="next">بعدی ⬅</button></div>
+</div>
+
+<!-- نتیجه -->
+<div class="card" id="res" hidden></div>
+<div class="foot">ریاضی - اعداد حقیقی<br>طراحی و توسعه توسط پیمان کرم پور</div>
+
+<script>
+/* ===== ابزارهای نمایش ===== */
+const m=c=>`<span class="m">${c}</span>`;
+const frac=(a,b)=>`<span class="fraction"><span class="numerator">${a}</span><span class="denominator">${b}</span></span>`;
+const F=(a,b)=>m(frac(a,b));
+const R=t=>'<div class="r">'+t+'</div>';
+const T=(h,rows,hl=[])=>'<div class="tw"><table class="tb"><tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr>'+rows.map((r,i)=>'<tr class="'+(hl.includes(i)?'hl':'')+'">'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table></div>';
+const S=(n,t,b)=>'<div class="st"><span class="sn">'+n+'</span><b>'+t+'</b><div class="sb">'+b+'</div></div>';
+const TIP=b=>'<div class="tip">💡 <b>نکته:</b> '+b+'</div>';
+const WARN=b=>'<div class="warn">⚠️ <b>اشتباه رایج:</b> '+b+'</div>';
+const ANS=b=>'<div class="ans">✅ <b>جواب:</b> '+b+'</div>';
+const CHK=b=>'<div class="chk">🔍 <b>بررسی جواب:</b> '+b+'</div>';
+const FIG=s=>'<div class="fig">'+s+'</div>';
+const SV=(w,h,b)=>'<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" font-family="Tahoma" direction="ltr">'+b+'</svg>';
+const tx=(x,y,t,o='')=>'<text x="'+x+'" y="'+y+'" text-anchor="middle" '+o+'>'+t+'</text>';
+const circ=(x,y,open,c='#e17055')=>'<circle cx="'+x+'" cy="'+y+'" r="6.5" fill="'+(open?'#fff':c)+'" stroke="'+c+'" stroke-width="2.5"/>';
+// محور عددی: از lo تا hi، پارهٔ رنگی از a تا b (می‌تواند ±Infinity باشد)، oa/ob = دایرهٔ توخالی
+function NL(lo,hi,a,b,oa,ob){const W=440,x0=34,u=(W-68)/(hi-lo),X=v=>x0+(v-lo)*u;
+ let s='<line x1="8" y1="50" x2="428" y2="50" stroke="#2d3436" stroke-width="2"/><path d="M432 50l-10-5v10z" fill="#2d3436"/>';
+ for(let i=lo;i<=hi;i++)s+='<line x1="'+X(i)+'" y1="44" x2="'+X(i)+'" y2="56" stroke="#2d3436"/>'+tx(X(i),74,i,'font-size="13"');
+ const l=a===-Infinity?10:X(a),r=b===Infinity?426:X(b);
+ s+='<line x1="'+l+'" y1="50" x2="'+r+'" y2="50" stroke="#e17055" stroke-width="6" stroke-linecap="round" opacity=".85"/>';
+ if(a===-Infinity)s+='<path d="M4 50l10-6v12z" fill="#e17055"/>';
+ if(b===Infinity)s+='<path d="M432 50l-10-6v12z" fill="#e17055"/>';
+ if(a!==-Infinity)s+=circ(X(a),50,oa); if(b!==Infinity)s+=circ(X(b),50,ob);
+ return SV(W,90,s);}
+// سه کسر روی محور بزرگ‌نمایی‌شده
+function ZOOM(){const X=v=>30+(v-0.905)/0.025*380;
+ const pts=[[10/11,'10/11'],[11/12,'11/12'],[12/13,'12/13']];
+ let s='<line x1="10" y1="50" x2="430" y2="50" stroke="#2d3436" stroke-width="2"/>';
+ pts.forEach((p,i)=>{s+=circ(X(p[0]),50,false,i==1?'#00b894':'#6c5ce7')+tx(X(p[0]),30,p[1],'font-size="14" fill="'+(i==1?'#00b894':'#6c5ce7')+'"')+tx(X(p[0]),80,p[0].toFixed(3).replace('-','−'),'font-size="12" fill="#636e72"');});
+ return SV(440,95,s);}
+
+/* ===== بانک سؤال‌ها (s=بخش، q=سؤال، d=شکل، o=گزینه‌ها، a=شمارهٔ گزینهٔ درست از صفر، e=توضیح) ===== */
+const gcd=(x,y)=>y?gcd(y,x%y):x;
+const LET=['الف','ب','ج','د'];
+const mn=i=>i<0?'−'+(-i):i;
+// محور عددی (W = عرض)
+function NX(lo,hi,a,b,oa,ob,W=300){const x0=26,u=(W-52)/(hi-lo),X=v=>x0+(v-lo)*u;
+ let s='<line x1="6" y1="40" x2="'+(W-10)+'" y2="40" stroke="#2d3436" stroke-width="2"/><path d="M'+(W-4)+' 40l-9-5v10z" fill="#2d3436"/>';
+ for(let i=lo;i<=hi;i++)s+='<line x1="'+X(i)+'" y1="35" x2="'+X(i)+'" y2="45" stroke="#2d3436"/>'+tx(X(i),62,mn(i),'font-size="12"');
+ const l=a===-Infinity?8:X(a),r=b===Infinity?W-12:X(b);
+ s+='<line x1="'+l+'" y1="40" x2="'+r+'" y2="40" stroke="#e17055" stroke-width="6" stroke-linecap="round" opacity=".85"/>';
+ if(a===-Infinity)s+='<path d="M3 40l10-6v12z" fill="#e17055"/>';if(b===Infinity)s+='<path d="M'+(W-4)+' 40l-10-6v12z" fill="#e17055"/>';
+ if(a!==-Infinity)s+=circ(X(a),40,oa);if(b!==Infinity)s+=circ(X(b),40,ob);
+ return SV(W,72,s);}
+// بزرگ‌نمایی چند کسر
+function ZM(p){const v=p.map(x=>x[0]),lo=Math.min(...v),hi=Math.max(...v),pd=(hi-lo)*.2,X=t=>30+(t-lo+pd)/(hi-lo+2*pd)*380;
+ let s='<line x1="10" y1="50" x2="430" y2="50" stroke="#2d3436" stroke-width="2"/>';
+ p.forEach((q,i)=>{const c=i==1?'#00b894':'#6c5ce7';s+=circ(X(q[0]),50,false,c)+tx(X(q[0]),30,q[1],'font-size="14" fill="'+c+'"')+tx(X(q[0]),80,q[0].toFixed(3).replace('-','−'),'font-size="12" fill="#636e72"');});
+ return FIG(SV(440,95,s));}
+// نمودار بُرداری مجموعه‌ها
+function VENN(){return FIG(SV(440,170,'<ellipse cx="220" cy="85" rx="212" ry="78" fill="#fff" stroke="#2d3436" stroke-width="2"/><line x1="300" y1="9" x2="300" y2="161" stroke="#2d3436" stroke-dasharray="4"/>'
+ +'<ellipse cx="150" cy="85" rx="130" ry="66" fill="#e8f4fd" stroke="#0984e3" stroke-width="2"/><ellipse cx="135" cy="95" rx="85" ry="46" fill="#e0fbf1" stroke="#00b894" stroke-width="2"/><ellipse cx="120" cy="105" rx="42" ry="24" fill="#fff8e1" stroke="#e1a800" stroke-width="2"/>'
+ +tx(120,110,'N','font-size="15" font-weight="bold"')+tx(135,66,'Z','font-size="15" font-weight="bold"')+tx(150,38,'Q','font-size="15" font-weight="bold"')+tx(370,90,'Q′','font-size="16" font-weight="bold" fill="#c2185b"')+tx(300,172,'R','font-size="14"')));}
+
+
+const fS=(n,d)=>d===1||n===0?(n<0?'−'+(-n):''+n):(n<0?'−':'')+frac(Math.abs(n),d);
+const FS=(n,d)=>m(fS(n,d));
+const LB=(n,d)=>(d===1||n===0?''+n:n+'/'+d).replace('-','−');
+function AXR(y,lo,hi,marks,W=440){const x0=34,u=(W-68)/(hi-lo),X=v=>x0+(v-lo)*u;
+ let s='<line x1="6" y1="'+y+'" x2="'+(W-8)+'" y2="'+y+'" stroke="#2d3436" stroke-width="2"/><path d="M'+(W-2)+' '+y+'l-9-5v10z" fill="#2d3436"/>';
+ marks.forEach((k,i)=>{const c=k[2]||'#6c5ce7';s+=circ(X(k[0]),y,!!k[3],c)+tx(X(k[0]),y+(i%2?34:-14),k[1],'font-size="13" fill="'+c+'"');});return s;}
+const CAP=(y,t)=>'<text x="432" y="'+y+'" text-anchor="start" direction="rtl" font-size="13" fill="#636e72">'+t+'</text>';
+// سه محور زیر هم: اعداد صحیح ← رادیکال ← رادیکال‌های بین آن‌ها
+function RAD(A,B,rads,ints){const lo=Math.sqrt(A),hi=Math.sqrt(B),pd=(hi-lo)*.12,L=lo-pd,H=hi+pd,G='#636e72',V='#00b894';let s='',y=62;
+ if(ints){s+=CAP(y-40,'۱) محور اعداد')+AXR(y,ints[0]-(ints[1]-ints[0])*.12,ints[1]+(ints[1]-ints[0])*.12,[[ints[0],''+ints[0],G,1],[ints[1],''+ints[1],G,1]]);y+=105;}
+ s+=CAP(y-40,ints?'۲) همان عددها به شکل رادیکال':'۱) دو عدد داده‌شده')+AXR(y,L,H,[[lo,'√'+A,G,1],[hi,'√'+B,G,1]]);y+=105;
+ s+=CAP(y-40,(ints?'۳)':'۲)')+' رادیکال عددهای بین آن‌ها (همه گنگ)')+AXR(y,L,H,[[lo,'√'+A,G,1],...rads.map(r=>[Math.sqrt(r),'√'+r,V]),[hi,'√'+B,G,1]].sort((a,b)=>a[0]-b[0]));
+ return FIG(SV(440,y+45,s));}
+// کسر بین دو کسر با اعداد منفی و صحیح (صورت علامت‌دار، مخرج مثبت)
+function medS(a,b,c,d,idx,wr,tip){const n=a+c,dd=b+d,g=gcd(Math.abs(n),dd),rn=n/g,rd=dd/g,o=wr.map(w=>FS(w[0],w[1]));o.splice(idx,0,FS(rn,rd));
+ const ints=(b===1||d===1);
+ return{s:'کسر بین دو کسر',q:'با روش «صورت + صورت و مخرج + مخرج»، یک عدد گویا بین '+FS(a,b)+' و '+FS(c,d)+' بنویس.',o,a:idx,
+ e:S(1,'هر دو عدد را به شکل کسر بنویس',(ints?'عدد صحیح (و صفر) را با <b>مخرج ۱</b> می‌نویسیم: '+(b===1?m(mn(a)+' = '+frac(mn(a),1)):'')+' '+(d===1?m(mn(c)+' = '+frac(mn(c),1)):''):'')+'علامت منفی را روی <b>صورت</b> بگذار و مخرج را مثبت نگه دار.'+R(m(fS(a,b)+' = '+frac(mn(a),b))+' ، '+m(fS(c,d)+' = '+frac(mn(c),d))))
+ +S(2,'جایگذاری در فرمول',m(frac(mn(a)+' + ('+mn(c)+')',b+' + '+d)+' = '+frac(n,dd)+(g>1||rn===0?' = '+fS(rn,rd):'')))
+ +S(3,'روی محور ببین!',ZM([[a/b,LB(a,b)],[rn/rd,LB(rn,rd)],[c/d,LB(c,d)]]))
+ +ANS(FS(rn,rd))+(tip?TIP(tip):'')};}
+
+/* ---------- نوع ۱: کسر بین دو کسر ---------- */
+function medQ(a,b,c,d,idx,wr){const n=a+c,dd=b+d,g=gcd(n,dd),rn=n/g,rd=dd/g,o=wr.map(w=>F(w[0],w[1]));o.splice(idx,0,F(rn,rd));
+ return{s:'کسر بین دو کسر',q:'با روش «صورت + صورت و مخرج + مخرج»، یک کسر بین '+F(a,b)+' و '+F(c,d)+' بنویس.',o,a:idx,
+ e:S(1,'فرمول','کسر میانیِ '+F('a','b')+' و '+F('c','d')+' برابر است با '+m(frac('a + c','b + d')))
+ +S(2,'جایگذاری',m(frac(a+' + '+c,b+' + '+d)+' = '+frac(n,dd)+(g>1?' = '+frac(rn,rd):'')))
+ +S(3,'ببین روی محور!','کسر سبز بین دو کسر دیگر است:'+ZM([[a/b,a+'/'+b],[rn/rd,rn+'/'+rd],[c/d,c+'/'+d]]))
+ +ANS(F(rn,rd))+WARN('جمع معمولی کسرها لازم نیست؛ فقط صورت با صورت و مخرج با مخرج جمع می‌شود. در شک بودی؟ همه را اعشاری کن و مقایسه کن.')};}
+const Q1=[
+medQ(1,3,1,2,2,[[1,5],[3,4],[2,3]]),
+medQ(3,5,2,3,1,[[1,2],[5,3],[4,5]]),
+medQ(2,7,3,8,3,[[5,7],[1,4],[2,5]]),
+medQ(5,6,6,7,0,[[11,12],[5,7],[6,7]]),
+{s:'کسر بین دو کسر',q:'سه کسر بین '+F(1,2)+' و '+F(3,4)+' کدام است؟ (روش را پشت‌سرهم تکرار کن.)',o:[m(frac(1,3)+' , '+frac(2,3)+' , '+frac(5,6)),m(frac(3,5)+' , '+frac(2,3)+' , '+frac(4,5)),m(frac(3,5)+' , '+frac(2,3)+' , '+frac(5,7)),m(frac(2,3)+' , '+frac(4,6)+' , '+frac(6,9))],a:2,
+e:S(1,'قدم اول: کسر وسط',m(frac('1 + 3','2 + 4')+' = '+frac(4,6)+' = '+frac(2,3)))
++S(2,'قدم دوم: دو بازهٔ جدید','بین '+F(1,2)+' و '+F(2,3)+' : '+m(frac('1 + 2','2 + 3')+' = '+frac(3,5))+R('بین '+F(2,3)+' و '+F(3,4)+' : '+m(frac('2 + 3','3 + 4')+' = '+frac(5,7))))
++S(3,'مرتب روی محور',ZM([[.6,'3/5'],[2/3,'2/3'],[5/7,'5/7']]))+ANS(m(frac(3,5)+' , '+frac(2,3)+' , '+frac(5,7)))
++WARN(F(2,3)+' و '+F(4,6)+' و '+F(6,9)+' برابرند؛ یک عدد را سه بار نوشته‌اند. '+F(4,5)+' هم از '+F(3,4)+' بزرگ‌تر است.')},
+{s:'کسر بین دو کسر',q:'بین دو عدد '+m('0.3')+' و '+m('0.4')+' چند عدد گویا وجود دارد؟',o:['فقط ۹ عدد','فقط ۱۰ عدد','بی‌شمار (بی‌نهایت) عدد','هیچ عددی'],a:2,
+e:S(1,'اول به نظر کم می‌آید','0.31 ، 0.32 ، … ، 0.39 همه بین آن‌ها هستند.')
++S(2,'ولی ادامه می‌دهیم','بین 0.31 و 0.32 هم عدد هست: 0.315 ؛ بین 0.315 و 0.316 هم: 0.3155 و …')
++S(3,'با روش کسر میانی',m(frac(3,10)+' , '+frac(7,20)+' , '+frac(4,10))+' ← هر بار می‌توان کسر تازه‌ای ساخت و این کار هرگز تمام نمی‌شود.')
++ANS('<b>بی‌شمار</b> عدد گویا')+TIP('بین هر دو عدد گویا، بی‌نهایت عدد گویا (و بی‌نهایت عدد گنگ) وجود دارد.')}
+,
+medS(-1,2,-1,3,0,[[-1,5],[2,5],[-1,3]],'برای کسرهای منفی هم همین فرمول کار می‌کند؛ فقط علامت را روی صورت بگذار.'),
+medS(0,1,1,2,2,[[1,2],[2,3],[-1,3]],'صفر را '+m(frac(0,1))+' بنویس؛ همیشه برای عدد صحیح مخرج ۱ بگذار.'),
+medS(2,1,3,1,1,[[5,1],[2,1],[3,2]],'عدد صحیح تنها را هم به شکل کسر با مخرج ۱ بنویس: '+m('2 = '+frac(2,1))),
+medS(-3,4,0,1,3,[[3,5],[-4,3],[0,1]],'صفر هم کسر است: '+m('0 = '+frac(0,1))+'. علامت منفی روی صورت می‌ماند.'),
+medS(-2,1,-1,1,0,[[-3,1],[-1,2],[-1,1]],'دو عدد صحیح منفی: '+m('−2 = '+frac('−2',1))+' و '+m('−1 = '+frac('−1',1))),
+medS(-1,2,1,3,2,[[1,2],[-2,3],[1,3]],'کسر میانی می‌تواند خودِ <b>صفر</b> هم باشد؛ صفر بین هر عدد منفی و مثبت است.')
+];
+
+/* ---------- نوع ۲: گویا، گنگ، عضویت، اشتراک و اجتماع ---------- */
+const Q2=[
+{s:'گویا، گنگ و مجموعه‌ها',q:'کدام عدد <b>گویا</b> است؟',o:[m('√7'),m('π'),m('√0.25'),m('0.1010010001…')],a:2,
+e:S(1,'تعریف','عدد گویا یعنی قابل نوشتن به شکل کسر '+F('a','b')+' (a و b صحیح، b≠0).')
++S(2,'بررسی گزینه‌ها',T(['عدد','چرا؟','نوع'],[[m('√7'),'۷ مربع کامل نیست','گنگ'],['π','اعشارش بی‌پایان و بی‌تکرار','گنگ'],[m('√0.25'),m('0.25 = 0.5 × 0.5 ⇒ √0.25 = 0.5 = ')+F(1,2),'<b>گویا</b>'],['0.1010010001…','بی‌پایان و بدون دورهٔ تکرار','گنگ']],[2]))
++ANS(m('√0.25 = 0.5'))},
+{s:'گویا، گنگ و مجموعه‌ها',q:'عدد '+m('0.272727…')+' (رقم‌های ۲۷ تکرار می‌شوند) چه نوع عددی است؟',o:['گنگ','گویا','طبیعی','حقیقی نیست'],a:1,
+e:S(1,'اعشار متناوب','هرگاه رقم‌ها با نظم تکرار شوند، عدد <b>گویا</b> است.')
++S(2,'تبدیل به کسر',m('x = 0.2727…')+R(m('100x = 27.2727…'))+R('تفریق: '+m('99x = 27 ⇒ x = '+frac(27,99)+' = '+frac(3,11))))
++ANS('گویا؛ برابر '+F(3,11))},
+{s:'گویا، گنگ و مجموعه‌ها',q:'کدام عبارت <b>نادرست</b> است؟',o:[m('−5 ∈ Z'),m('√25 ∈ Q'),m('0 ∈ N'),m('√3 ∈ R')],a:2,
+e:S(1,'مجموعه‌ها را یادآوری کنیم',m('N = {1, 2, 3, …}')+R(m('W = {0, 1, 2, …}')+' ، '+m('Z = {…, −1, 0, 1, …}')))
++S(2,'بررسی',T(['عبارت','نتیجه','دلیل'],[[m('−5 ∈ Z'),'✔','−5 صحیح است'],[m('√25 ∈ Q'),'✔','√25 = 5 = '+F(5,1)],[m('0 ∈ N'),'✘','۰ طبیعی نیست؛ از ۱ شروع می‌شود'],[m('√3 ∈ R'),'✔','هر عدد گنگ حقیقی است']],[2]))
++ANS('عبارت «'+m('0 ∈ N')+'» نادرست است.')},
+{s:'گویا، گنگ و مجموعه‌ها',q:m('Q ∩ Q′')+' برابر کدام است؟',o:[m('Q'),m('R'),m('∅'),m('Q′')],a:2,
+e:S(1,'اشتراک یعنی چه؟','اشتراک = عددهایی که در <b>هر دو</b> مجموعه‌اند.')+S(2,'نمودار',VENN())
++S(3,'نتیجه','هیچ عددی همزمان گویا و گنگ نیست؛ دو ناحیه جدا هستند ⇒ اشتراک تهی است.')+ANS(m('Q ∩ Q′ = ∅'))},
+{s:'گویا، گنگ و مجموعه‌ها',q:m('Z ∩ N')+' برابر کدام است؟',o:[m('Z'),m('N'),m('∅'),m('W')],a:1,
+e:S(1,'نمودار',VENN()+'N داخل Z است.')+S(2,'اشتراک','وقتی یک مجموعه داخل دیگری باشد، اشتراکشان همان مجموعهٔ کوچک‌تر است.')
++ANS(m('Z ∩ N = N'))+WARN('Z بزرگ‌تر است، ولی اشتراک فقط عضوهای <b>مشترک</b> را دارد، یعنی N.')},
+{s:'گویا، گنگ و مجموعه‌ها',q:m('Q ∪ Q′')+' برابر کدام است؟',o:[m('Q′'),m('∅'),m('R'),m('Q')],a:2,
+e:S(1,'اجتماع یعنی چه؟','اجتماع = همهٔ عددهای دو مجموعه با هم.')+S(2,'نمودار',VENN())
++S(3,'نتیجه','گویاها و گنگ‌ها با هم همهٔ عددهای حقیقی را می‌سازند.')+ANS(m('Q ∪ Q′ = R'))},
+{s:'گویا، گنگ و مجموعه‌ها',q:'کدام عبارت درست است؟',o:[m('N ⊆ Q′'),m('Z ⊆ Q'),m('Z ⊆ Q′'),m('Q ∩ Q′ = Q')],a:1,
+e:S(1,'نمودار',VENN())
++S(2,'بررسی',T(['عبارت','نتیجه','دلیل'],[[m('N ⊆ Q′'),'✘','طبیعی‌ها گویا هستند'],[m('Z ⊆ Q'),'✔','هر عدد صحیح گویاست: '+m('3 = '+frac(3,1))],[m('Z ⊆ Q′'),'✘','صحیح‌ها گنگ نیستند'],[m('Q ∩ Q′ = Q'),'✘','Q ∩ Q′ = ∅']],[1]))
++ANS(m('Z ⊆ Q'))}
+];
+
+
+const opQ=(ex,opts,idx,why)=>({s:'گویا، گنگ و مجموعه‌ها',q:m(ex)+' برابر کدام است؟',o:opts.map(x=>m(x)),a:idx,e:S(1,'نمودار',VENN())+S(2,'استدلال',why)+ANS(m(ex+' = '+opts[idx]))});
+const memQ=(q,opts,idx,why,tbl)=>({s:'گویا، گنگ و مجموعه‌ها',q,o:opts,a:idx,e:S(1,'نمودار',VENN())+S(2,'بررسی',why)+(tbl||'')+ANS(opts[idx])});
+const Q2b=[
+opQ('Z ∩ Q',['Q','Z','N','∅'],1,'Z داخل Q است (هر صحیح یک کسر با مخرج ۱ است). اشتراک یعنی بخش مشترک، همان Z.'),
+opQ('N ∪ Z',['N','W','Q','Z'],3,'اجتماع یعنی همه با هم؛ چون N داخل Z است، چیزی به Z اضافه نمی‌شود.'),
+opQ('R ∩ Q′',['Q','∅','R','Q′'],3,'گنگ‌ها همه حقیقی‌اند، پس بخش مشترک R و Q′ همان Q′ است.'),
+opQ('R − Q′',['Q′','Q','∅','R'],1,'از همهٔ حقیقی‌ها، گنگ‌ها را برمی‌داریم؛ گویاها می‌مانند.'),
+opQ('N ∩ Q′',['Z','Q′','N','∅'],3,'همهٔ طبیعی‌ها گویا هستند، پس هیچ عددی همزمان طبیعی و گنگ نیست.'),
+opQ('Z ∪ Q',['Z','Q','R','Q′'],1,'Z داخل Q است؛ اجتماع همان مجموعهٔ بزرگ‌تر، یعنی Q است.'),
+memQ('کدام عدد عضو هر سه مجموعهٔ Z و Q و R است؟',[m('0.5'),m('√2'),m('−4'),m('π')],2,'عددی که صحیح باشد، هم گویا و هم حقیقی است.',T(['عدد','Z','Q','R'],[['0.5','✘','✔','✔'],['√2','✘','✘','✔'],['−4','✔','✔','✔'],['π','✘','✘','✔']],[2])),
+memQ('عدد '+F(6,2)+' عضو کدام مجموعه‌هاست؟',['فقط Q','N و Z و Q و R','فقط Z','Q′ و R'],1,'اول ساده کن: '+m(frac(6,2)+' = 3')+' . عدد ۳ طبیعی است، پس صحیح، گویا و حقیقی هم هست.'),
+memQ('کدام عبارت درست است؟',[m('−'+frac(3,4)+' ∈ Z'),m('−'+frac(3,4)+' ∈ N'),m('−'+frac(3,4)+' ∈ Q′'),m('−'+frac(3,4)+' ∈ Q')],3,'−'+m(frac(3,4))+' یک کسر با صورت و مخرج صحیح است ⇒ گویا. اعشاری است، پس صحیح یا طبیعی نیست.'),
+memQ('کدام عبارت درست است؟',[m('0 ∈ N'),m('0 ∈ Q′'),m('0 ∈ Z'),m('0 ∈ ∅')],2,'۰ صحیح است. (۰ را '+m(frac(0,1))+' هم می‌نویسیم، پس گویاست.) ولی طبیعی نیست.'),
+memQ('کدام عبارت درست است؟',[m('π ∈ Q′'),m('π ∈ Q'),m('π ∈ Z'),m('π ∈ N')],0,'اعشار π بی‌پایان و بی‌تکرار است ⇒ گنگ.')
+];
+const Q2all=[...Q2,...Q2b];
+
+/* ---------- نوع ۳: عدد گنگ بین دو عدد ---------- */
+const ST='برای پیدا کردن گنگ بین دو عدد: هر دو را به شکل رادیکال بنویس و ریشهٔ عددهای بین آن‌ها را بردار که <b>مربع کامل نباشند</b>.';
+const Q3=[
+{s:'عدد گنگ بین دو عدد',q:'کدام عدد گنگ بین ۲ و ۳ قرار دارد؟',o:[m('2.5'),m('√9'),m('√5'),m('2.25')],a:2,
+e:S(1,'سه محور زیر هم','۲ را '+m('√4')+' و ۳ را '+m('√9')+' می‌نویسیم؛ پس هر '+m('√')+' از عددی بین ۴ و ۹ (که مربع کامل نیست) بین ۲ و ۳ است.'+RAD(4,9,[4.1,5,6,7,8,8.9],[2,3]))
++S(2,'نتیجه',m('√4.1 , √5 , √6 , √7 , √8 , …')+' همه گنگ و بین ۲ و ۳ هستند.')+ANS(m('√5 ≈ 2.236'))+TIP(ST)+WARN('2.5 و 2.25 بین ۲ و ۳ هستند ولی گویا. '+m('√9 = 3')+' هم خودِ ۳ است.')},
+{s:'عدد گنگ بین دو عدد',q:'کدام عدد گنگ بین ۳ و ۴ قرار دارد؟',o:[m('√12.25'),m('√10'),m('√16'),m('3.75')],a:1,
+e:S(1,'سه محور زیر هم','۳ را '+m('√9')+' و ۴ را '+m('√16')+' می‌نویسیم.'+RAD(9,16,[10,11,13,15],[3,4]))
++S(2,'گزینه‌ها',T(['گزینه','مقدار','نوع'],[[m('√12.25'),'3.5','گویا'],[m('√10'),'3.16…','<b>گنگ</b>'],[m('√16'),'4','سر بازه'],['3.75','3.75','گویا']],[1]))+ANS(m('√10'))},
+{s:'عدد گنگ بین دو عدد',q:'کدام عدد گنگ بین ۱ و ۲ قرار دارد؟',o:[m('√4'),m('1.5'),m('√2'),m('√1')],a:2,
+e:S(1,'سه محور زیر هم','۱ را '+m('√1')+' و ۲ را '+m('√4')+' می‌نویسیم.'+RAD(1,4,[1.5,2,3,3.5],[1,2]))
++S(2,'نتیجه',m('√2 ≈ 1.41')+' و '+m('√3 ≈ 1.73')+' گنگ‌اند.')+ANS(m('√2'))+WARN(m('√1 = 1')+' و '+m('√4 = 2')+' خودِ دو سر بازه‌اند.')},
+{s:'عدد گنگ بین دو عدد',q:'کدام عدد گنگ بین '+m('0.1')+' و '+m('0.2')+' قرار دارد؟',o:[m('0.15'),m('0.121212…'),m('0.2'),m('0.1010010001…')],a:3,
+e:S(1,'گنگ یعنی؟','اعشار بی‌پایان و <b>بدون</b> تکرار منظم.')
++S(2,'بررسی',T(['عدد','بین ۰٫۱ و ۰٫۲؟','نوع'],[[m('0.15'),'✔','گویا (مختوم)'],[m('0.121212…'),'✔','گویا (متناوب)'],[m('0.2'),'✘','خودِ سر بازه'],[m('0.1010010001…'),'✔ (0.101 > 0.1)','<b>گنگ</b>']],[3]))+ANS(m('0.1010010001…'))},
+{s:'عدد گنگ بین دو عدد',q:'کدام گزینه سه عدد <b>گنگ</b> بین ۴ و ۵ است؟',o:[m('√20 , √25 , √26'),m('4.5 , 4.6 , 4.7'),m('√15 , √17 , √24'),m('√17 , √18 , √19')],a:3,
+e:S(1,'سه محور زیر هم','۴ را '+m('√16')+' و ۵ را '+m('√25')+' می‌نویسیم.'+RAD(16,25,[17,18,19,21,23,24],[4,5]))
++S(2,'ردّ گزینه‌ها',T(['گزینه','ایراد'],[[m('√20 , √25 , √26'),'√25 = 5 و √26 > 5 بیرون‌اند'],['4.5 , 4.6 , 4.7','گویا هستند'],[m('√15 , √17 , √24'),'√15 ≈ 3.87 کمتر از ۴ است'],[m('√17 , √18 , √19'),'<b>همه گنگ و بین ۴ و ۵</b>']],[3]))+ANS(m('√17 , √18 , √19'))},
+{s:'عدد گنگ بین دو عدد',q:'کدام گزینه فقط شامل عددهای گنگ بین '+m('√5')+' و '+m('√10')+' است؟',o:[m('√6 , √8 , √9'),m('√7 , √8 , √10'),m('√6 , √7 , √8'),m('√5 , √6 , √7')],a:2,
+e:S(1,'دو محور زیر هم','دو عدد از قبل رادیکالی‌اند؛ فقط عددهای بین ۵ و ۱۰ را بردار.'+RAD(5,10,[6,7,8],null))
++S(2,'مربع کامل را حذف کن',m('√9 = 3')+' گویاست و حذف می‌شود؛ می‌ماند '+m('√6 , √7 , √8'))+ANS(m('√6 , √7 , √8'))+TIP(ST)}
+];
+
+/* ---------- نوع ۴: مجموعه‌ها روی محور ---------- */
+function axQ(set,rng,corr,wr,idx,cr,wrr,rule){const o=wr.slice(),rs=wrr.slice();o.splice(idx,0,corr);rs.splice(idx,0,cr);
+ return{s:'مجموعه‌ها روی محور',q:'کدام محور، مجموعهٔ '+m(set)+' را نشان می‌دهد؟',o:o.map((sp,i)=>'<div class="ol"><b>'+LET[i]+')</b>'+NX(rng[0],rng[1],...sp)+'</div>'),a:idx,
+ e:S(1,'نماد را بخوان',rule)+S(2,'شکل درست',FIG(NX(rng[0],rng[1],...corr,380)))
+ +S(3,'هر گزینه را بررسی کنیم',T(['گزینه','نتیجه','دلیل'],o.map((sp,i)=>[LET[i],i==idx?'✔':'✘',rs[i]]),[idx]))+ANS('گزینهٔ «'+LET[idx]+'»')};}
+function setQ(spec,rng,opts,idx,rule,why){return{s:'مجموعه‌ها روی محور',q:'مجموعهٔ نقاط رنگی روی محور را به زبان ریاضی بنویس.',d:FIG(NX(rng[0],rng[1],...spec,380)),o:opts.map(x=>m(x)),a:idx,
+ e:S(1,'شکل را بخوان',rule)+S(2,'نماد ریاضی',m(opts[idx]))+S(3,'چرا بقیه نه؟',why)+ANS(m(opts[idx]))};}
+const RULE='<b>دایرهٔ توپر</b> یعنی خود عدد عضو است (≤ یا ≥)؛ <b>دایرهٔ توخالی</b> یعنی عضو نیست (&lt; یا &gt;).';
+const Q4=[
+axQ('{x ∈ R | x ≥ −1}',[-3,4],[-1,Infinity,false,false],[[-1,Infinity,true,false],[-Infinity,-1,false,false],[-Infinity,-1,false,true]],1,'سمت راست، −1 داخل مجموعه (توپر)',['−1 توخالی است ولی باید توپر باشد','جهت اشتباه (چپ)','جهت اشتباه و توخالی'],'x ≥ −1 یعنی «x بزرگ‌تر یا مساوی −1»: از −1 به راست، و چون «مساوی» دارد خود −1 هم عضو است. '+RULE),
+axQ('{x ∈ R | −2 &lt; x ≤ 3}',[-3,4],[-2,3,true,false],[[-2,3,false,true],[-2,3,true,true],[-2,3,false,false]],3,'−2 توخالی و 3 توپر ✔',['دو دایره جابه‌جا شده‌اند','3 باید توپر باشد','−2 باید توخالی باشد'],'سمت چپ علامت &lt; (بدون مساوی) ⇒ −2 توخالی. سمت راست علامت ≤ ⇒ 3 توپر. '+RULE),
+axQ('{x ∈ R | x &lt; 1}',[-3,4],[-Infinity,1,false,true],[[-Infinity,1,false,false],[1,Infinity,true,false],[1,Infinity,false,false]],2,'چپ و دایرهٔ توخالی در 1',['1 نباید داخل مجموعه باشد','جهت اشتباه','جهت اشتباه'],'x &lt; 1 یعنی «x کوچک‌تر از 1»: همهٔ عددهای سمت چپ، و چون «مساوی» ندارد، 1 توخالی است. '+RULE),
+axQ('{x ∈ R | −1 ≤ x ≤ 4}',[-2,5],[-1,4,false,false],[[-1,4,true,true],[-1,4,false,true],[-1,Infinity,false,false]],0,'هر دو سر توپر ✔',['هر دو سر باید توپر باشد','4 باید توپر باشد','فقط یک نقطهٔ ابتدا دارد و تا بی‌نهایت می‌رود'],'هر دو علامت ≤ هستند، پس <b>هر دو سر توپر</b> و پاره‌خط بین −1 و 4. '+RULE),
+setQ([-3,2,false,true],[-4,3],['−3 ≤ x &lt; 2','−3 &lt; x ≤ 2','−3 ≤ x ≤ 2','−3 &lt; x &lt; 2'],0,'−3 توپر ⇒ «≤» ؛ 2 توخالی ⇒ «&lt;». '+RULE,'بقیه دایره‌ها را جابه‌جا یا هر دو را یکسان گرفته‌اند. دقت کن: توپر ⇒ مساوی؛ توخالی ⇒ بدون مساوی.'),
+setQ([1,Infinity,true,false],[-2,5],['x ≤ 1','x ≥ 1','x &lt; 1','x &gt; 1'],3,'پیکان به راست ⇒ «بزرگ‌تر» (&gt;). دایرهٔ توخالی در 1 ⇒ بدون مساوی. '+RULE,'x ≥ 1 دایره‌اش توپر می‌شد؛ x &lt; 1 و x ≤ 1 جهتشان به چپ است.')
+];
+
+const Q=[...Q1,...Q2all,...Q3,...Q4];
+
+/* ===== صدا ===== */
+let AC;
+function tone(f,t0,d,type,g,f2){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const n=AC.currentTime+t0,o=AC.createOscillator(),v=AC.createGain();
+ o.type=type;o.frequency.setValueAtTime(f,n);if(f2)o.frequency.linearRampToValueAtTime(f2,n+d);
+ v.gain.setValueAtTime(g,n);v.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(v);v.connect(AC.destination);o.start(n);o.stop(n+d);}catch(e){}}
+const sndOK=()=>{tone(523,0,.15,'sine',.25);tone(659,.12,.15,'sine',.25);tone(784,.24,.35,'sine',.25);};
+const sndBAD=()=>{tone(220,0,.35,'sawtooth',.14,110);tone(150,.18,.35,'square',.08,80);};
+
+/* ===== ذخیره‌سازی در مرورگر ===== */
+const KEY='quiz_real_numbers_v2';
+let st=null;
+try{st=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const $=id=>document.getElementById(id);
+const FA='۰۱۲۳۴۵۶۷۸۹';
+function fa(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while((n=w.nextNode()))n.nodeValue=n.nodeValue.replace(/[0-9]/g,d=>FA[d]).replace(/(\d|[۰-۹])\.(?=[۰-۹])/g,'$1٫').replace(/−[۰-۹]+(٫[۰-۹]+)?/g,'\u2066$&\u2069');}
+const show=id=>{['start','quiz','res'].forEach(x=>$(x).hidden=x!==id);window.scrollTo(0,0);};
+
+/* ===== ورود ===== */
+$('go').onclick=()=>{const a=$('fn').value.trim(),b=$('ln').value.trim();
+ if(!a||!b){alert('لطفاً نام و نام خانوادگی را وارد کن');return;}
+ st={fn:a,ln:b,cur:0,ans:[],fin:false};save();openQuiz();};
+
+/* ===== نمایش سؤال ===== */
+function openQuiz(){$('who').textContent=st.fn+' '+st.ln;$('all').textContent=Q.length;show('quiz');draw();}
+function draw(){
+ const d=Q[st.cur],a=st.ans[st.cur],done=a!=null&&a!==-1;
+ $('sec').textContent=d.s;$('q').innerHTML=(st.cur+1)+'. '+d.q;
+ $('dg').innerHTML=d.d||'';$('dg').style.display=d.d?'block':'none';
+ const box=$('opts');box.innerHTML='';box.className='options'+(done?' locked':'');
+ d.o.forEach((t,i)=>{const e=document.createElement('div');e.className='option';e.innerHTML=t;
+  if(done){if(i===d.a)e.classList.add('correct');else if(i===a)e.classList.add('incorrect');}
+  e.onclick=()=>pick(i);box.appendChild(e);});
+ const fb=$('fb'),ex=$('exp');
+ if(done){const ok=a===d.a;fb.className='fb '+(ok?'ok':'bad');fb.innerHTML=ok?'آفرین! پاسخ درست است 🎉':'این بار نشد ❌ ولی توضیح زیر را بخوان تا دفعهٔ بعد درست جواب بدهی';fb.style.display='block';ex.innerHTML='<b>📘 حل کامل:</b>'+d.e;ex.style.display='block';}
+ else{fb.style.display='none';ex.style.display='none';}
+ const ok=st.ans.filter((v,i)=>v===Q[i].a).length,an=st.ans.filter(v=>v!=null).length;
+ $('okc').textContent=ok;$('anc').textContent=an;$('fill').style.width=(an/Q.length*100)+'%';
+ $('dots').innerHTML='';Q.forEach((x,i)=>{const b=document.createElement('button');const v=st.ans[i];
+  b.className='dot'+(v==null?'':v===x.a?' ok':' bad')+(i===st.cur?' cur':'');b.textContent=i+1;b.onclick=()=>go(i);$('dots').appendChild(b);});
+ $('prev').disabled=st.cur===0;$('next').textContent=st.cur===Q.length-1?'پایان و دیدن نتیجه 🏁':'بعدی ⬅';
+ fa($('quiz'));
+}
+function pick(i){if(st.ans[st.cur]!=null)return;st.ans[st.cur]=i;save();(i===Q[st.cur].a?sndOK:sndBAD)();draw();
+ setTimeout(()=>$('fb').scrollIntoView({behavior:'smooth',block:'center'}),150);}
+function go(i){st.cur=i;save();draw();window.scrollTo(0,0);}
+$('prev').onclick=()=>{if(st.cur>0)go(st.cur-1);};
+$('next').onclick=()=>{if(st.cur<Q.length-1)go(st.cur+1);else{st.fin=true;save();result();}};
+
+/* ===== نتیجه و بازخورد ===== */
+function result(){
+ const n=Q.length,ok=st.ans.filter((v,i)=>v===Q[i].a).length,un=st.ans.filter(v=>v==null).length,p=Math.round(ok/n*100);
+ const bad={};Q.forEach((x,i)=>{if(st.ans[i]!==x.a)bad[x.s]=1;});
+ const msg=p>=90?['🏆','عالی بود! تو بر این مبحث مسلطی.']:p>=70?['🌟','خیلی خوب! با کمی مرور به قلهٔ قله می‌رسی.']:p>=50?['👍','خوب است؛ ولی هنوز جا برای پیشرفت داری. توضیح سؤال‌های اشتباه را دوباره بخوان.']:['💪','نگران نباش! یادگیری با تمرین می‌آید. توضیح‌ها را بخوان و دوباره امتحان کن.'];
+ const wk=Object.keys(bad);
+ $('res').innerHTML='<div class="hero">'+msg[0]+'</div><h1>'+'آزمون تمام شد، '+esc(st.fn)+' عزیز!</h1><div class="score">'+ok+' از '+n+'</div><div class="sub">'+p+' درصد درست'+(un?' ، '+un+' سؤال را بی‌پاسخ گذاشتی':'')+'<br>'+msg[1]+'</div>'
+ +(wk.length?'<div class="weak"><b>📌 بخش‌هایی که پیشنهاد می‌کنم مرور کنی:</b><br>'+wk.map(x=>'• '+x).join('<br>')+'</div>':'<div class="weak">🎯 در همهٔ بخش‌ها درست جواب دادی!</div>')
+ +'<div class="nav"><button onclick="review()" class="o">مرور سؤال‌ها</button><button onclick="again()" class="g">شروع دوباره</button></div>';
+ show('res');fa($('res'));}
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function review(){st.fin=false;st.cur=0;save();openQuiz();}
+function again(){if(confirm('همهٔ پاسخ‌های قبلی پاک شود و آزمون از اول شروع شود؟')){st.ans=[];st.cur=0;st.fin=false;save();openQuiz();}}
+
+/* ===== شروع ===== */
+if(st&&st.fn){st.ans=st.ans||[];if(st.fin)result();else openQuiz();}else show('start');
+</script>
+</body>
+</html>
